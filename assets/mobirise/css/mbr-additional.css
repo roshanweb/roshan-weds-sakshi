@@ -619,7 +619,7 @@ a:hover {
 }
 @media (max-width: 767px) {
   .mbr-arrow {
-    display: none;
+    /* display: none; */
   }
 }
 .form-control-label {
@@ -1377,8 +1377,8 @@ body {
   background-image: url("../../../assets/images/header.JPG");
 }
 .cid-qIieWoha50 {
-  padding-top: 60px !important;
-  padding-bottom: 45px !important;
+  padding-top: 60px;
+  padding-bottom: 45px;
   background-color: #ffffff;
 }
 
