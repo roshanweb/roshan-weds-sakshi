@@ -1,16 +1,7 @@
 (function($) {
-    $(document).ready(function () {
-        "use strict";
-      /*Main Menu Button */
-      $('.main_menu_btn').on("click", function (e) {
-        $(this).toggleClass('main_menu_btn_open');
-        $('.main_menu_block').toggleClass('main_menu_block_open').fadeToggle();
-        $('.main_menu_block').find('.menu_wrapper').toggleClass('active');
-        $('header .anim').toggleClass('active');
-        e.preventDefault();
-      });
-    });
-    var isBuilder = $('html').hasClass('is-builder');
+ 
+    
+	var isBuilder = $('html').hasClass('is-builder');
 
     $.extend($.easing, {
         easeInOutCubic: function(x, t, b, c, d) {
@@ -319,117 +310,13 @@
         });
 
         // embedded videos
-        $(window).smartresize(function() {
-            $('.mbr-embedded-video').each(function() {
-                $(this).height(
-                    $(this).width() *
-                    parseInt($(this).attr('height') || 315) /
-                    parseInt($(this).attr('width') || 560)
-                );
-            });
-        });
+        
         $(document).on('add.cards', function(event) {
             if ($('html').hasClass('mbr-site-loaded') && $(event.target).outerFind('iframe').length)
                 $(window).resize();
         });
 
-        // background video
-        function videoParser(card) {
-            $(card).outerFind('[data-bg-video]').each(function() {
-                var videoURL = $(this).attr('data-bg-video');
-                var parsedUrl = videoURL.match(/(http:\/\/|https:\/\/|)?(player.|www.)?(vimeo\.com|youtu(be\.com|\.be|be\.googleapis\.com))\/(video\/|embed\/|watch\?v=|v\/)?([A-Za-z0-9._%-]*)(&\S+)?/);
-
-                var $img = $('<div class="mbr-background-video-preview">')
-                    .hide()
-                    .css({
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center'
-                    });
-                $('> *:eq(0)', this).before($img);
-
-                // youtube or vimeo
-                if (parsedUrl && (/youtube/g.test(parsedUrl[3]) || /vimeo/g.test(parsedUrl[3]))) {
-                    // youtube
-                    if (parsedUrl && /youtube/g.test(parsedUrl[3])) {
-                        var previewURL = 'http' + ('https:' === location.protocol ? 's' : '') + ':';
-                        previewURL += '//img.youtube.com/vi/' + parsedUrl[6] + '/maxresdefault.jpg';
-
-                        $('<img>').on('load', function() {
-                            if (120 === (this.naturalWidth || this.width)) {
-                                // selection of preview in the best quality
-                                var file = this.src.split('/').pop();
-
-                                switch (file) {
-                                    case 'maxresdefault.jpg':
-                                        this.src = this.src.replace(file, 'sddefault.jpg');
-                                        break;
-                                    case 'sddefault.jpg':
-                                        this.src = this.src.replace(file, 'hqdefault.jpg');
-                                        break;
-                                    default: // image not found
-                                        if (isBuilder) {
-                                            $img.css('background-image', 'url("images/no-video.jpg")')
-                                                .show();
-                                        }
-                                }
-                            } else {
-                                $img.css('background-image', 'url("' + this.src + '")')
-                                    .show();
-                            }
-                        }).attr('src', previewURL);
-
-                        if ($.fn.YTPlayer && !isBuilder && !$.isMobile()) {
-                            $('> *:eq(1)', this).before('<div class="mbr-background-video"></div>').prev()
-                                .YTPlayer({
-                                    videoURL: parsedUrl[6],
-                                    containment: 'self',
-                                    showControls: false,
-                                    mute: true
-                                });
-                        }
-                    } else if (parsedUrl && /vimeo/g.test(parsedUrl[3])) { // vimeo
-                        var request = new XMLHttpRequest();
-                        request.open('GET', 'https://vimeo.com/api/v2/video/' + parsedUrl[6] + '.json', true);
-                        request.onreadystatechange = function() {
-                            if (this.readyState === 4) {
-                                if (this.status >= 200 && this.status < 400) {
-                                    var response = JSON.parse(this.responseText);
-
-                                    $img.css('background-image', 'url("' + response[0].thumbnail_large + '")')
-                                        .show();
-                                } else if (isBuilder) { // image not found
-                                    $img.css('background-image', 'url("images/no-video.jpg")')
-                                        .show();
-                                }
-                            }
-                        };
-                        request.send();
-                        request = null;
-
-                        if ($.fn.vimeo_player && !isBuilder && !$.isMobile()) {
-                            $('> *:eq(1)', this).before('<div class="mbr-background-video"></div>').prev()
-                                .vimeo_player({
-                                    videoURL: videoURL,
-                                    containment: 'self',
-                                    showControls: false,
-                                    mute: true
-                                });
-                        }
-                    }
-                } else if (isBuilder) { // neither youtube nor vimeo
-                    $img.css('background-image', 'url("images/video-placeholder.jpg")')
-                        .show();
-                }
-            });
-        }
-
-        if (isBuilder) {
-            $(document).on('add.cards', function(event) {
-                videoParser(event.target);
-            });
-        } else {
-            videoParser(document.body);
-        }
+     
 
         $(document).on('changeParameter.cards', function(event, paramName, value, key) {
             if (paramName === 'bg') {
@@ -563,10 +450,7 @@
 
         $(document).ready(function() {
             // disable animation on scroll on mobiles
-            if ($.isMobile()) {
-                return;
-                // enable animation on scroll
-            } else if ($('input[name=animation]').length) {
+            if ($('input[name=animation]').length) {
                 $('input[name=animation]').remove();
 
                 var $animatedElements = $('p, h1, h2, h3, h4, h5, a, button, small, img, li, blockquote, .mbr-author-name, em, label, input, textarea, .input-group, .iconbox, .btn-social, .mbr-figure, .mbr-map, .mbr-testimonial .card-block, .mbr-price-value, .mbr-price-figure, .dataTable, .dataTables_info').not(function() {
@@ -648,6 +532,7 @@
     // arrow down
     if (!isBuilder) {
         $('.mbr-arrow').on('click', function(e) {
+			console.log('e=>',$(e.target));
             var $next = $(e.target).closest('section').next();
             if($next.hasClass('engine')){
                 $next = $next.closest('section').next();
@@ -657,6 +542,7 @@
                 scrollTop: offset.top
             }, 800, 'linear');
         });
+		
     }
 
     // add padding to the first element, if it exists
@@ -706,311 +592,12 @@
 
     // Script for popUp video
     $(document).ready(function() {
-        if (!isBuilder) {
-            var modal = function(item) {
-                var videoIframe = $(item).parents('section').find('iframe')[0],
-                    videoIframeSrc = $(videoIframe).attr('src');
-
-                item.parents('section').css('z-index', '1');
-
-                if (videoIframeSrc.indexOf('youtu') !== -1) {
-                    videoIframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
-                }
-
-                if (videoIframeSrc.indexOf('vimeo') !== -1) {
-                    var vimeoPlayer = new Vimeo.Player($(videoIframe));
-                    vimeoPlayer.play();
-                }
-
-                $(item).parents('section').find($(item).attr('data-modal'))
-                    .css('display', 'table')
-                    .click(function() {
-                        if (videoIframeSrc.indexOf('youtu') !== -1) {
-                            videoIframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
-                        }
-
-                        if (videoIframeSrc.indexOf('vimeo') !== -1) {
-                            vimeoPlayer.pause();
-                        }
-
-                        $(this).css('display', 'none').off('click');
-                        item.parents('section').css('z-index', '0');
-                    });
-            };
-
-            // Youtube & Vimeo
-            $('.modalWindow-video iframe').each(function() {
-                var videoURL = $(this).attr('data-src');
-                $(this).removeAttr('data-src');
-
-                var parsedUrl = videoURL.match(/(http:\/\/|https:\/\/|)?(player.|www.)?(vimeo\.com|youtu(be\.com|\.be|be\.googleapis\.com))\/(video\/|embed\/|watch\?v=|v\/)?([A-Za-z0-9._%-]*)(&\S+)?/);
-                if (videoURL.indexOf('youtu') !== -1) {
-                    $(this).attr('src', 'https://youtube.com/embed/' + parsedUrl[6] + '?rel=0&enablejsapi=1');
-                } else if (videoURL.indexOf('vimeo') !== -1) {
-                    $(this).attr('src', 'https://player.vimeo.com/video/' + parsedUrl[6] + '?autoplay=0&loop=0');
-                }
-            });
-
-            $('[data-modal]').click(function() {
-                modal($(this));
-            });
-        }
-    });
-
-    if (!isBuilder) {
-        // open dropdown menu on hover
-        if (!$.isMobile()) {
-            var $menu = $('section.menu'),
-                $width = $(window).width(),
-                $collapsed = $menu.find('.navbar').hasClass('collapsed');
-            // check if collapsed on
-            if (!$collapsed ){
-                // check width device
-                if ($width > 991) {
-                    $menu.find('ul.navbar-nav li.dropdown').hover(
-                        function() {
-                            if (!$(this).hasClass('open')) {
-                                $(this).find('a')[0].click();
-                            }
-                        },
-                        function() {
-                            if ($(this).hasClass('open')) {
-                                $(this).find('a')[0].click();
-                            }
-                        }
-                    );
-                    $menu.find('ul.navbar-nav li.dropdown .dropdown-menu .dropdown').hover(
-                        function() {
-                            if (!$(this).hasClass('open')) {
-                                $(this).find('a')[0].click();
-                            }
-                        },
-                        function() {
-                            if ($(this).hasClass('open')) {
-                                $(this).find('a')[0].click();
-                            }
-                        }
-                    );
-                }
-            }    
-        }
-    }
-
-    // Functions from plugins for
-    // compatible with old projects 
-    function setActiveCarouselItem(card){
-       var $target = $(card).find('.carousel-item:first');
-       $target.addClass('active');
-    }
-    function initTestimonialsCarousel(card){
-        var $target = $(card),
-            $carouselID = $target.attr('ID') +"-carousel"; 
-        $target.find('.carousel').attr('id',$carouselID);
-        $target.find('.carousel-controls a').attr('href','#'+$carouselID);
-        $target.find('.carousel-indicators li').attr('data-target','#'+$carouselID);
-        setActiveCarouselItem($target);  
-    }
-    function initClientCarousel(card){
-        var $target = $(card),
-        countElems = $target.find('.carousel-item').length,
-        visibleSlides = $target.find('.carousel-inner').attr('data-visible');
-        if (countElems < visibleSlides){
-            visibleSlides = countElems;
-        }
-        $target.find('.carousel-inner').attr('class', 'carousel-inner slides' + visibleSlides);
-        $target.find('.clonedCol').remove();
-
-        $target.find('.carousel-item .col-md-12').each(function() {
-            if (visibleSlides < 2) {
-                $(this).attr('class', 'col-md-12');
-            } else if (visibleSlides == '5') {
-                $(this).attr('class', 'col-md-12 col-lg-15');
-            } else {
-                $(this).attr('class', 'col-md-12 col-lg-' + 12 / visibleSlides);
-            }
-        });
-
-        $target.find('.carousel-item').each(function() {
-            var itemToClone = $(this);
-            for (var i = 1; i < visibleSlides; i++) {
-                itemToClone = itemToClone.next();
-                if (!itemToClone.length) {
-                    itemToClone = $(this).siblings(':first');
-                }
-                var index = itemToClone.index();
-                itemToClone.find('.col-md-12:first').clone().addClass('cloneditem-' + i).addClass('clonedCol').attr('data-cloned-index', index).appendTo($(this).children().eq(0));
-            }
-        });
-    }
-    function updateClientCarousel(card){
-        var $target = $(card),
-            countElems = $target.find('.carousel-item').length,
-            visibleSlides = $target.find('.carousel-inner').attr('data-visible');
-        if (countElems < visibleSlides){
-            visibleSlides = countElems;
-        }
-        $target.find('.clonedCol').remove();
-        $target.find('.carousel-item').each(function() {
-            var itemToClone = $(this);
-            for (var i = 1; i < visibleSlides; i++) {
-                itemToClone = itemToClone.next();
-                if (!itemToClone.length) {
-                    itemToClone = $(this).siblings(':first');
-                }
-                var index = itemToClone.index();
-                itemToClone.find('.col-md-12:first').clone().addClass('cloneditem-' + i).addClass('clonedCol').attr('data-cloned-index', index).appendTo($(this).children().eq(0));
-            }
-        });
-    }
-    function clickHandler(e){
-        e.stopPropagation();
-        e.preventDefault();
-
-        var $target = $(e.target);
-        var curItem;
-        var curIndex;
-
-        if ($target.closest('.clonedCol').length) {
-            curItem = $target.closest('.clonedCol');
-            curIndex = curItem.attr('data-cloned-index');
-        } else {
-            curItem = $target.closest('.carousel-item');
-            curIndex = curItem.index();
-        }
-        var item = $($target.closest('.carousel-inner').find('.carousel-item')[curIndex]).find('img')[0];
-                        
-        if ($target.parents('.clonedCol').length > 0) {
-            item.click();
-        }
-    }
-    $.fn.outerFind = function(selector) {
-        return this.find(selector).addBack(selector);
-    };
-    function initTabs(target) {
-        if ($(target).find('.nav-tabs').length !== 0) {
-            $(target).outerFind('section[id^="tabs"]').each(function() {
-                var componentID = $(this).attr('id');
-                var $tabsNavItem = $(this).find('.nav-tabs .nav-item');
-                var $tabPane = $(this).find('.tab-pane');
-
-                $tabPane.removeClass('active').eq(0).addClass('active');
-
-                $tabsNavItem.find('a').removeClass('active').removeAttr('aria-expanded')
-                    .eq(0).addClass('active');
-
-                $tabPane.each(function() {
-                    $(this).attr('id', componentID + '_tab' + $(this).index());
-                });
-
-                $tabsNavItem.each(function() {
-                    $(this).find('a').attr('href', '#' + componentID + '_tab' + $(this).index());
-                });
-            });
-        }
-    }
-    function clickPrev(event){
-        event.stopPropagation();
-        event.preventDefault();
-    }
-    if(!isBuilder){
-        if(typeof window.initClientPlugin ==='undefined'){
-            if($(document.body).find('.clients').length!=0){
-                window.initClientPlugin = true;
-                $(document.body).find('.clients').each(function(index, el) {
-                    if(!$(this).attr('data-isinit')){
-                        initTestimonialsCarousel($(this));
-                        initClientCarousel($(this));
-                    }  
-                });  
-            } 
-        }
-        if(typeof window.initPopupBtnPlugin === 'undefined'){
-            if($(document.body).find('section.popup-btn-cards').length!=0){
-                window.initPopupBtnPlugin = true;
-                $('section.popup-btn-cards .card-wrapper').each(function(index, el) {
-                    $(this).addClass('popup-btn');
-                }); 
-            }      
-        }
-        if(typeof window.initTestimonialsPlugin === 'undefined'){
-            if($(document.body).find('.testimonials-slider').length!=0){
-                window.initTestimonialsPlugin = true;
-                $('.testimonials-slider').each(function(){
-                    initTestimonialsCarousel(this);
-                }); 
-            }      
-        }
-        if (typeof window.initSwitchArrowPlugin === 'undefined'){
-            window.initSwitchArrowPlugin = true;
-            $(document).ready(function() {
-                if ($('.accordionStyles').length!=0) {
-                        $('.accordionStyles .card-header a[role="button"]').each(function(){
-                            if(!$(this).hasClass('collapsed')){
-                                $(this).addClass('collapsed');
-                            }
-                        });
-                    }
-            });
-            $('.accordionStyles .card-header a[role="button"]').click(function(){
-                var $id = $(this).closest('.accordionStyles').attr('id'),
-                    $iscollapsing = $(this).closest('.card').find('.panel-collapse');
-                if (!$iscollapsing.hasClass('collapsing')) {
-                    if ($id.indexOf('toggle') != -1){
-                        if ($(this).hasClass('collapsed')) {
-                            $(this).find('span.sign').removeClass('mbri-arrow-down').addClass('mbri-arrow-up'); 
-                        }
-                        else{
-                            $(this).find('span.sign').removeClass('mbri-arrow-up').addClass('mbri-arrow-down'); 
-                        }
-                    }
-                    else if ($id.indexOf('accordion')!=-1) {
-                        var $accordion =  $(this).closest('.accordionStyles ');
-                    
-                        $accordion.children('.card').each(function() {
-                            $(this).find('span.sign').removeClass('mbri-arrow-up').addClass('mbri-arrow-down'); 
-                        });
-                        if ($(this).hasClass('collapsed')) {
-                            $(this).find('span.sign').removeClass('mbri-arrow-down').addClass('mbri-arrow-up'); 
-                        }
-                    }
-                }
-            });
-        }
-        if(typeof window.initTabsPlugin === 'undefined'){
-            window.initTabsPlugin = true;
-            initTabs(document.body);
-        }
         
-        // Fix for slider bug
-        if($('.mbr-slider.carousel').length!=0){
-            $('.mbr-slider.carousel').each(function(){
-                var $slider = $(this),
-                    controls = $slider.find('.carousel-control'),
-                    indicators = $slider.find('carousel-indicators li');
+	});
 
-                $slider.on('slide.bs.carousel', function () {
-                    controls.bind('click',function(event){
-                        clickPrev(event);
-                    });
-                    indicators.bind('click',function(event){
-                        clickPrev(event);
-                    })
-                    $slider.carousel({
-                        keyboard:false
-                    });
-                }).on('slid.bs.carousel',function(){
-                    controls.unbind('click');
-                    indicators.unbind('click');
-                    $slider.carousel({
-                        keyboard:true
-                    });
-                    if($slider.find('.carousel-item.active').length>1){
-                        $slider.find('.carousel-item.active').eq(1).removeClass('active');
-                        $slider.find('.carousel-control li.active').eq(1).removeClass('active');
-                    }
-                });
-            });
-        }
-    }
+        // Functions from plugins for
+    // compatible with old projects 
+   
+      
 })(jQuery);
 !function(){try{document.getElementsByClassName("engine")[0].getElementsByTagName("a")[0].removeAttribute("rel")}catch(b){}if(!document.getElementById("top-1")){var a=document.createElement("section");a.id="top-1";a.className="engine";a.innerHTML='<a href="https://mobirise.me">Mobirise</a> Mobirise v4.6.3';document.body.insertBefore(a,document.body.childNodes[0])}}();
