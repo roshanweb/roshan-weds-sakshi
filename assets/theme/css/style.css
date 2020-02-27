@@ -1,7 +1,10 @@
 /*!
- * Mobirise v4 theme (https://mobirise.com/)
- * Copyright 2017 Mobirise
+
  */
+ 
+ p.cust-inv-sub {
+    font-weight: 400;
+}
  
  /**Love Animation**/ 
 .no-js #loader { display: none;  }
@@ -554,6 +557,18 @@ p .cust-inv-sub {
 .cust-inv-back {
 	padding-bottom:30px;
 	padding-top:50px;
+	background-image: url(https://storage.needpix.com/rsynced_images/watercolor-979951_1280.jpg);
+	
+	
+	min-height: 100%;
+	background-color: transparent;
+	background-position: center top;
+	background-repeat: no-repeat;
+}
+
+.z-index-contain {
+	z-index:9999;
+	
 }
 
 .events .time {
@@ -666,7 +681,7 @@ section {
     text-align: center; } }
 /*! Font-weight  */
 .mbr-light {
-  font-weight: 300; }
+  font-weight: 500; }
 
 .mbr-regular {
   font-weight: 400; }
